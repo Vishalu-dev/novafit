@@ -7,27 +7,55 @@ const TOTAL_MS = 1600;
 
 const PARTICLE_COUNT = 18;
 
+function StaticLoaderContent() {
+  return (
+    <div className="relative flex flex-col items-center">
+      <div className="relative grid h-28 w-28 place-items-center md:h-32 md:w-32" aria-hidden>
+        <p className="preloader-wordmark relative z-10 font-display text-xl font-black uppercase tracking-[0.35em] text-foreground opacity-0 md:text-2xl">
+          NOVA
+          <span className="text-primary">FIT</span>
+        </p>
+        <span className="preloader-logo-glow pointer-events-none absolute inset-0 rounded-full opacity-0" aria-hidden />
+      </div>
+      <p className="preloader-tagline mt-8 max-w-[18rem] text-center font-display text-[10px] font-semibold uppercase tracking-[0.42em] text-muted-foreground opacity-0 md:text-[11px]">
+        Forge Your Ultimate Physique
+      </p>
+    </div>
+  );
+}
+
 export default function Loader() {
   const reducedMotion = usePrefersReducedMotion();
-  const [done, setDone] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return sessionStorage.getItem(SESSION_KEY) === "1";
-  });
+  const [mounted, setMounted] = useState(false);
+  const [done, setDone] = useState(false);
   const [phase, setPhase] = useState<"black" | "form" | "pulse" | "tagline" | "exit">("black");
 
-  const particles = useMemo(
-    () =>
-      Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+  const particles = useMemo(() => {
+    if (!mounted) return [];
+    return Array.from({ length: PARTICLE_COUNT }, (_, i) => {
+      const radius = 52 + (i % 5) * 8;
+      const angle = (i / PARTICLE_COUNT) * Math.PI * 2;
+      return {
         id: i,
-        angle: (i / PARTICLE_COUNT) * Math.PI * 2,
-        radius: 52 + (i % 5) * 8,
         delay: i * 0.03,
-      })),
-    [],
-  );
+        x: Math.round(Math.cos(angle) * radius * 100) / 100,
+        y: Math.round(Math.sin(angle) * radius * 100) / 100,
+      };
+    });
+  }, [mounted]);
 
   useEffect(() => {
-    if (done) return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    if (sessionStorage.getItem(SESSION_KEY) === "1") {
+      setDone(true);
+      return;
+    }
+
     sessionStorage.setItem(SESSION_KEY, "1");
 
     if (reducedMotion) {
@@ -48,7 +76,7 @@ export default function Loader() {
       window.clearTimeout(t4);
       window.clearTimeout(t5);
     };
-  }, [done, reducedMotion]);
+  }, [mounted, reducedMotion]);
 
   return (
     <AnimatePresence mode="wait">
@@ -62,70 +90,74 @@ export default function Loader() {
           aria-live="polite"
           aria-label="Loading NOVAFIT"
         >
-          <div className="relative flex flex-col items-center">
-            <div className="relative grid h-28 w-28 place-items-center md:h-32 md:w-32" aria-hidden>
-              {particles.map((p) => (
+          {!mounted ? (
+            <StaticLoaderContent />
+          ) : (
+            <div className="relative flex flex-col items-center">
+              <div className="relative grid h-28 w-28 place-items-center md:h-32 md:w-32" aria-hidden>
+                {particles.map((p) => (
+                  <motion.span
+                    key={p.id}
+                    className="preloader-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-primary"
+                    initial={{
+                      opacity: 0,
+                      x: p.x,
+                      y: p.y,
+                      scale: 0.2,
+                    }}
+                    animate={
+                      phase === "black"
+                        ? { opacity: 0, x: p.x, y: p.y, scale: 0.2 }
+                        : {
+                            opacity: [0, 1, 0.85],
+                            x: 0,
+                            y: 0,
+                            scale: [0.2, 1, 0.6],
+                          }
+                    }
+                    transition={{
+                      duration: 0.55,
+                      delay: p.delay,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  />
+                ))}
+                <motion.p
+                  className="preloader-wordmark relative z-10 font-display text-xl font-black uppercase tracking-[0.35em] text-foreground md:text-2xl"
+                  initial={{ opacity: 0, filter: "blur(12px)" }}
+                  animate={{
+                    opacity: phase === "black" ? 0 : 1,
+                    filter: phase === "black" ? "blur(12px)" : "blur(0px)",
+                  }}
+                  transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  NOVA
+                  <span className="text-primary">FIT</span>
+                </motion.p>
                 <motion.span
-                  key={p.id}
-                  className="preloader-particle absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full bg-primary"
-                  initial={{
-                    opacity: 0,
-                    x: Math.cos(p.angle) * p.radius,
-                    y: Math.sin(p.angle) * p.radius,
-                    scale: 0.2,
+                  className="preloader-logo-glow pointer-events-none absolute inset-0 rounded-full"
+                  aria-hidden
+                  animate={{
+                    opacity: phase === "pulse" || phase === "tagline" || phase === "exit" ? [0.35, 0.7, 0.35] : 0,
+                    scale: phase === "pulse" || phase === "tagline" || phase === "exit" ? [0.9, 1.08, 0.9] : 0.85,
                   }}
-                  animate={
-                    phase === "black"
-                      ? { opacity: 0, x: Math.cos(p.angle) * p.radius, y: Math.sin(p.angle) * p.radius, scale: 0.2 }
-                      : {
-                          opacity: [0, 1, 0.85],
-                          x: 0,
-                          y: 0,
-                          scale: [0.2, 1, 0.6],
-                        }
-                  }
-                  transition={{
-                    duration: 0.55,
-                    delay: p.delay,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
+                  transition={{ duration: 0.9, ease: "easeInOut" }}
                 />
-              ))}
-              <motion.p
-                className="preloader-wordmark relative z-10 font-display text-xl font-black uppercase tracking-[0.35em] text-foreground md:text-2xl"
-                initial={{ opacity: 0, filter: "blur(12px)" }}
-                animate={{
-                  opacity: phase === "black" ? 0 : 1,
-                  filter: phase === "black" ? "blur(12px)" : "blur(0px)",
-                }}
-                transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              >
-                NOVA
-                <span className="text-primary">FIT</span>
-              </motion.p>
-              <motion.span
-                className="preloader-logo-glow pointer-events-none absolute inset-0 rounded-full"
-                aria-hidden
-                animate={{
-                  opacity: phase === "pulse" || phase === "tagline" || phase === "exit" ? [0.35, 0.7, 0.35] : 0,
-                  scale: phase === "pulse" || phase === "tagline" || phase === "exit" ? [0.9, 1.08, 0.9] : 0.85,
-                }}
-                transition={{ duration: 0.9, ease: "easeInOut" }}
-              />
-            </div>
+              </div>
 
-            <motion.p
-              className="preloader-tagline mt-8 max-w-[18rem] text-center font-display text-[10px] font-semibold uppercase tracking-[0.42em] text-muted-foreground md:text-[11px]"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{
-                opacity: phase === "tagline" || phase === "exit" ? 1 : 0,
-                y: phase === "tagline" || phase === "exit" ? 0 : 10,
-              }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              Forge Your Ultimate Physique
-            </motion.p>
-          </div>
+              <motion.p
+                className="preloader-tagline mt-8 max-w-[18rem] text-center font-display text-[10px] font-semibold uppercase tracking-[0.42em] text-muted-foreground md:text-[11px]"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{
+                  opacity: phase === "tagline" || phase === "exit" ? 1 : 0,
+                  y: phase === "tagline" || phase === "exit" ? 0 : 10,
+                }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                Forge Your Ultimate Physique
+              </motion.p>
+            </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
