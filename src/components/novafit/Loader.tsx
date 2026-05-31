@@ -3,22 +3,23 @@ import { useEffect, useMemo, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 const SESSION_KEY = "novafit_intro_seen";
-const TOTAL_MS = 1600;
+const TOTAL_MS = 2000;
+const TAGLINE = "Strong Today. Stronger Tomorrow.";
 
 const PARTICLE_COUNT = 18;
 
 function StaticLoaderContent() {
   return (
-    <div className="relative flex flex-col items-center">
-      <div className="relative grid h-28 w-28 place-items-center md:h-32 md:w-32" aria-hidden>
-        <p className="preloader-wordmark relative z-10 font-display text-xl font-black uppercase tracking-[0.35em] text-foreground opacity-0 md:text-2xl">
+    <div className="flex min-h-0 flex-col items-center justify-center gap-4">
+      <div className="relative grid h-24 w-24 place-items-center md:h-28 md:w-28" aria-hidden>
+        <p className="preloader-wordmark relative z-10 font-display text-lg font-black uppercase tracking-[0.35em] text-foreground opacity-0 md:text-xl">
           NOVA
           <span className="text-primary">FIT</span>
         </p>
         <span className="preloader-logo-glow pointer-events-none absolute inset-0 rounded-full opacity-0" aria-hidden />
       </div>
-      <p className="preloader-tagline mt-8 max-w-[18rem] text-center font-display text-[10px] font-semibold uppercase tracking-[0.42em] text-muted-foreground opacity-0 md:text-[11px]">
-        Forge Your Ultimate Physique
+      <p className="preloader-tagline max-w-[16rem] text-center font-display text-[9px] font-semibold uppercase tracking-[0.38em] text-muted-foreground opacity-0 md:max-w-[18rem] md:text-[10px]">
+        {TAGLINE}
       </p>
     </div>
   );
@@ -59,14 +60,14 @@ export default function Loader() {
     sessionStorage.setItem(SESSION_KEY, "1");
 
     if (reducedMotion) {
-      const t = window.setTimeout(() => setDone(true), 400);
+      const t = window.setTimeout(() => setDone(true), 600);
       return () => window.clearTimeout(t);
     }
 
-    const t1 = window.setTimeout(() => setPhase("form"), 120);
-    const t2 = window.setTimeout(() => setPhase("pulse"), 520);
-    const t3 = window.setTimeout(() => setPhase("tagline"), 900);
-    const t4 = window.setTimeout(() => setPhase("exit"), 1280);
+    const t1 = window.setTimeout(() => setPhase("form"), 150);
+    const t2 = window.setTimeout(() => setPhase("pulse"), 600);
+    const t3 = window.setTimeout(() => setPhase("tagline"), 1100);
+    const t4 = window.setTimeout(() => setPhase("exit"), 1750);
     const t5 = window.setTimeout(() => setDone(true), TOTAL_MS);
 
     return () => {
@@ -85,7 +86,7 @@ export default function Loader() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-          className="preloader-screen fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black"
+          className="preloader-screen fixed inset-0 z-[100] flex items-center justify-center bg-black px-4"
           role="status"
           aria-live="polite"
           aria-label="Loading NOVAFIT"
@@ -93,8 +94,8 @@ export default function Loader() {
           {!mounted ? (
             <StaticLoaderContent />
           ) : (
-            <div className="relative flex flex-col items-center">
-              <div className="relative grid h-28 w-28 place-items-center md:h-32 md:w-32" aria-hidden>
+            <div className="flex min-h-0 flex-col items-center justify-center gap-4">
+              <div className="relative grid h-24 w-24 place-items-center md:h-28 md:w-28" aria-hidden>
                 {particles.map((p) => (
                   <motion.span
                     key={p.id}
@@ -123,7 +124,7 @@ export default function Loader() {
                   />
                 ))}
                 <motion.p
-                  className="preloader-wordmark relative z-10 font-display text-xl font-black uppercase tracking-[0.35em] text-foreground md:text-2xl"
+                  className="preloader-wordmark relative z-10 font-display text-lg font-black uppercase tracking-[0.35em] text-foreground md:text-xl"
                   initial={{ opacity: 0, filter: "blur(12px)" }}
                   animate={{
                     opacity: phase === "black" ? 0 : 1,
@@ -146,15 +147,26 @@ export default function Loader() {
               </div>
 
               <motion.p
-                className="preloader-tagline mt-8 max-w-[18rem] text-center font-display text-[10px] font-semibold uppercase tracking-[0.42em] text-muted-foreground md:text-[11px]"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: phase === "tagline" || phase === "exit" ? 1 : 0,
-                  y: phase === "tagline" || phase === "exit" ? 0 : 10,
-                }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="preloader-tagline max-w-[16rem] text-center font-display text-[9px] font-semibold uppercase text-muted-foreground md:max-w-[18rem] md:text-[10px]"
+                initial={{ opacity: 0, y: 8, letterSpacing: "0.52em", filter: "blur(4px)" }}
+                animate={
+                  phase === "tagline" || phase === "exit"
+                    ? {
+                        opacity: [0, 1, 1],
+                        y: 0,
+                        letterSpacing: ["0.52em", "0.38em", "0.42em"],
+                        filter: ["blur(4px)", "blur(0px)", "blur(0px)"],
+                        textShadow: [
+                          "0 0 0px oklch(0.62 0.24 22 / 0)",
+                          "0 0 24px oklch(0.62 0.24 22 / 0.55)",
+                          "0 0 12px oklch(0.62 0.24 22 / 0.35)",
+                        ],
+                      }
+                    : { opacity: 0, y: 8, letterSpacing: "0.52em", filter: "blur(4px)" }
+                }
+                transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
               >
-                Forge Your Ultimate Physique
+                {TAGLINE}
               </motion.p>
             </div>
           )}

@@ -6,46 +6,46 @@
  */
 export { IMAGE_PLACEHOLDER } from "./placeholder";
 
-/* Logos */
+/* Logos — kept as PNG (optimized) */
 import logo from "./logos/logo.png";
 import titleLogo from "./logos/title-logo.png";
 
 /* Programs (hero folder) */
-import strengthTraining from "./hero/strength-training.jpg";
-import hiit from "./hero/hiit.jpg";
-import yogaMobility from "./hero/yoga-mobility.jpg";
-import crossfit from "./hero/crossfit.jpg";
-import cardioZone from "./hero/cardio-zone.jpg";
-import personalTraining from "./hero/personal-training.jpg";
+import strengthTraining from "./hero/strength-training.webp";
+import hiit from "./hero/hiit.webp";
+import yogaMobility from "./hero/yoga-mobility.webp";
+import crossfit from "./hero/crossfit.webp";
+import cardioZone from "./hero/cardio-zone.webp";
+import personalTraining from "./hero/personal-training.webp";
 
 /* Trainers */
-import arjunRana from "./trainers/arjun-rana.jpg";
-import kavyaSharma from "./trainers/kavya-sharma.jpg";
-import rohitVerma from "./trainers/rohit-verma.jpg";
-import priyaIyer from "./trainers/priya-iyer.jpg";
+import arjunRana from "./trainers/arjun-rana.webp";
+import kavyaSharma from "./trainers/kavya-sharma.webp";
+import rohitVerma from "./trainers/rohit-verma.webp";
+import priyaIyer from "./trainers/priya-iyer.webp";
 
 /* Gallery */
-import gym01 from "./gallery/gym-01.jpg";
-import gym02 from "./gallery/gym-02.jpg";
-import gym03 from "./gallery/gym-03.jpg";
-import gym04 from "./gallery/gym-04.jpg";
-import gym05 from "./gallery/gym-05.jpg";
-import gym06 from "./gallery/gym-06.jpg";
-import gym07 from "./gallery/gym-07.jpg";
-import gym08 from "./gallery/gym-08.jpg";
+import gym01 from "./gallery/gym-01.webp";
+import gym02 from "./gallery/gym-02.webp";
+import gym03 from "./gallery/gym-03.webp";
+import gym04 from "./gallery/gym-04.webp";
+import gym05 from "./gallery/gym-05.webp";
+import gym06 from "./gallery/gym-06.webp";
+import gym07 from "./gallery/gym-07.webp";
+import gym08 from "./gallery/gym-08.webp";
 
 /* Testimonial avatars */
-import testimonialAditya from "./icons/testimonial-aditya.jpg";
-import testimonialSneha from "./icons/testimonial-sneha.jpg";
-import testimonialVikram from "./icons/testimonial-vikram.jpg";
-import testimonialMeera from "./icons/testimonial-meera.jpg";
+import testimonialAditya from "./icons/testimonial-aditya.webp";
+import testimonialSneha from "./icons/testimonial-sneha.webp";
+import testimonialVikram from "./icons/testimonial-vikram.webp";
+import testimonialMeera from "./icons/testimonial-meera.webp";
 
 /* Section backgrounds */
 import heroBg from "./backgrounds/hero-bg.webp";
 import transformationBg from "./backgrounds/transformation-bg.webp";
 import ctaBg from "./backgrounds/cta-bg.webp";
 
-/* Public URLs for &lt;head&gt; meta (favicon, og:image, preload) */
+/* Public URLs for <head> meta (favicon, og:image, preload) */
 import logoUrl from "./logos/logo.png?url";
 import titleLogoUrl from "./logos/title-logo.png?url";
 import heroBgUrl from "./backgrounds/hero-bg.webp?url";

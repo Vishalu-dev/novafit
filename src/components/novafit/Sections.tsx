@@ -275,15 +275,15 @@ function Counter({ end, suffix = "" }: { end: number; suffix?: string }) {
 export function Stats() {
   const items = [
     { v: 10000, s: "+", l: "Members" },
-    { v: 50, s: "+", l: "Elite Trainers" },
+    { v: 50, s: "+", l: "Trainers" },
     { v: 15, s: "+", l: "Years Experience" },
     { v: 24, s: "/7", l: "Access" },
   ];
   return (
-    <section className="relative mx-auto max-w-7xl px-4 py-16">
-      <div className="relative overflow-hidden rounded-3xl glass-strong p-8 md:p-12">
+    <section className="relative mx-auto max-w-7xl overflow-x-clip px-4 py-12 md:py-16">
+      <div className="relative overflow-visible rounded-3xl glass-strong p-5 sm:p-8 md:p-12">
         <div className="absolute -left-20 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px]" />
-        <div className="relative grid grid-cols-2 gap-8 md:grid-cols-4">
+        <div className="relative grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:gap-8">
           {items.map((it, i) => (
             <motion.div
               key={it.l}
@@ -291,12 +291,14 @@ export function Stats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="text-center"
+              className="min-w-0 px-1 text-center"
             >
-              <div className="font-display text-5xl font-black text-gradient-silver md:text-6xl">
+              <div className="font-display text-[clamp(1.75rem,6.5vw,3.75rem)] font-black leading-none text-gradient-silver">
                 <Counter end={it.v} suffix={it.s} />
               </div>
-              <div className="mt-2 font-display text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">{it.l}</div>
+              <div className="mt-2 font-display text-[9px] font-semibold uppercase leading-snug tracking-[0.18em] text-muted-foreground sm:text-[10px] sm:tracking-[0.22em] md:text-xs md:tracking-[0.25em]">
+                {it.l}
+              </div>
             </motion.div>
           ))}
         </div>
@@ -316,8 +318,14 @@ export function Programs() {
     { icon: FaDumbbell, t: "Personal Training", d: "One-on-one elite coaching tailored to you.", img: programImages[5] },
   ];
   return (
-    <Section id="programs" eyebrow="Programs" title="Train Like A Pro" subtitle="Six precision-engineered programs to crush every goal.">
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <Section
+      id="programs"
+      eyebrow="Programs"
+      title="Train Like A Pro"
+      subtitle="Six precision-engineered programs to crush every goal."
+      className="!py-12 md:!py-24"
+    >
+      <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
         {programs.map((p, i) => (
           <motion.div
             key={p.t}
@@ -332,13 +340,14 @@ export function Programs() {
               aria-label={`Learn more about ${p.t}`}
               className="block overflow-hidden rounded-2xl silver-border bg-surface shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
             >
-              <div className="relative h-56 overflow-hidden bg-surface">
+              <div className="relative h-44 overflow-hidden bg-surface sm:h-52 md:h-56">
                 <OptimizedImage
                   src={p.img}
                   alt={`${p.t} program at NOVAFIT`}
                   fill
                   width={800}
                   height={450}
+                  lazy
                   cinematic
                   className="transition-transform duration-700 group-hover:scale-110"
                 />
@@ -488,7 +497,7 @@ export function Trainers() {
     { name: "Priya Iyer", role: "Yoga & Mobility", img: trainerImages[3] },
   ];
   return (
-    <Section id="trainers" eyebrow="Coaches" title="Meet The Elite" subtitle="World-class certified trainers ready to push you past your limits.">
+    <Section id="trainers" eyebrow="Coaches" title="Meet The Elite" subtitle="World-class certified trainers ready to push you past your limits." data-lazy-section>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {trainers.map((t, i) => (
           <motion.div
@@ -506,6 +515,7 @@ export function Trainers() {
                   fill
                   width={600}
                   height={800}
+                  lazy
                   cinematic
                   className="transition-transform duration-700 group-hover:scale-110"
                 />
@@ -587,7 +597,7 @@ export function Pricing() {
 /* ---------- GALLERY ---------- */
 export function Gallery() {
   return (
-    <Section id="gallery" eyebrow="Gallery" title="Inside The Arena" subtitle="A cinematic look at the NOVAFIT floor.">
+    <Section id="gallery" eyebrow="Gallery" title="Inside The Arena" subtitle="A cinematic look at the NOVAFIT floor." data-lazy-section>
       <div className="columns-2 gap-4 md:columns-3 lg:columns-4">
         {galleryImages.map((src, i) => (
           <motion.div
@@ -605,6 +615,7 @@ export function Gallery() {
                 fill
                 width={900}
                 height={675}
+                lazy
                 cinematic
                 className="transition-transform duration-700 hover:scale-110"
               />
@@ -651,6 +662,7 @@ function TestimonialCard({ t, active }: { t: TestimonialItem; active: boolean })
             alt={t.n}
             width={44}
             height={44}
+            lazy
             className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-primary/40"
           />
           <div className="min-w-0 text-left">
@@ -811,7 +823,7 @@ export function Testimonials() {
     { n: "Meera J.", r: "Member · 6 months", q: "The 24/7 access is a game changer. I can train at 5am or midnight — the facility is always pristine.", img: testimonialAvatars[3] },
   ];
   return (
-    <Section id="testimonials" eyebrow="Voices" title="What Members Say" aria-label="Member testimonials">
+    <Section id="testimonials" eyebrow="Voices" title="What Members Say" aria-label="Member testimonials" data-lazy-section>
       <TestimonialsCarousel tests={tests} />
     </Section>
   );
@@ -894,7 +906,14 @@ export function Schedule() {
 export function Contact() {
   const { openMembership } = useMembership();
   return (
-    <Section id="contact" eyebrow="Visit" title="Find The Floor" subtitle="Come tour the facility. First session on us.">
+    <Section
+      id="contact"
+      eyebrow="Visit"
+      title="Find The Floor"
+      subtitle="Come tour the facility. First session on us."
+      className="!pb-10 md:!pb-16"
+      data-lazy-section
+    >
       <div className="grid gap-5 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="rounded-2xl glass-strong p-6 neon-border">
@@ -940,7 +959,7 @@ export function Contact() {
           <iframe
             title="NOVAFIT Location"
             src="https://www.google.com/maps?q=Koregaon+Park,+Pune&output=embed"
-            className="h-[min(420px,55vh)] w-full grayscale-[50%] contrast-110 brightness-90 md:h-[420px]"
+            className="h-[min(280px,42vh)] w-full grayscale-[50%] contrast-110 brightness-90 md:h-[360px] lg:h-[400px]"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
@@ -969,7 +988,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative mt-12 border-t border-primary/20 bg-background/80 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
+    <footer className="relative mt-6 border-t border-primary/20 bg-background/80 pb-[calc(8.5rem+env(safe-area-inset-bottom))] md:mt-12 md:pb-0">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="mx-auto max-w-7xl px-4 py-12 md:py-14">
         <div
@@ -1020,7 +1039,7 @@ export function Footer() {
                 <FaInstagram className="text-lg" />
               </a>
               <a
-                href="https://wa.me/919999999999"
+                href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="WhatsApp"
@@ -1085,7 +1104,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/5 py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} NOVAFIT · Forge your ultimate physique.
+        © 2026 NOVAFIT. All Rights Reserved.
       </div>
     </footer>
   );

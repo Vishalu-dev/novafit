@@ -287,9 +287,30 @@
     background: linear-gradient(
       90deg,
       transparent,
-      oklch(0.62 0.24 22 / 0.35),
+      oklch(0.62 0.24 22 / 0.45),
       transparent
     );
+    box-shadow:
+      0 0 12px oklch(0.62 0.24 22 / 0.25),
+      0 0 24px oklch(0.62 0.24 22 / 0.12);
+    pointer-events: none;
+  }
+
+  .section-flow-transition::after {
+    content: "";
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    top: 50%;
+    height: 1px;
+    transform: translateY(-50%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      oklch(0.62 0.24 22 / 0.3),
+      transparent
+    );
+    box-shadow: 0 0 16px oklch(0.62 0.24 22 / 0.2);
     pointer-events: none;
   }
   .cinematic-img {

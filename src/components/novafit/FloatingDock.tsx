@@ -1,19 +1,23 @@
 import { memo } from "react";
 import { FaWhatsapp, FaPhone, FaInstagram, FaDumbbell, FaUsers, FaHouse } from "react-icons/fa6";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
+import { siteConfig } from "@/lib/env";
 import { useMembership } from "./membership-context";
 
+const waHref = `https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`;
+const telHref = `tel:${siteConfig.contactPhone.replace(/\s/g, "")}`;
+
 const social = [
-  { icon: FaWhatsapp, label: "WhatsApp", href: "https://wa.me/919999999999", accent: "text-[#25D366]" },
-  { icon: FaPhone, label: "Call", href: "tel:+919999999999", accent: "text-foreground" },
-  { icon: FaInstagram, label: "Instagram", href: "https://instagram.com", accent: "text-[#E1306C]" },
+  { icon: FaWhatsapp, label: "WhatsApp", href: waHref, accent: "text-[#25D366]" },
+  { icon: FaPhone, label: "Call", href: telHref, accent: "text-foreground" },
+  { icon: FaInstagram, label: "Instagram", href: siteConfig.instagram, accent: "text-[#E1306C]" },
 ] as const;
 
 const mobileNav = [
   { icon: FaHouse, label: "Home", href: "#home" },
   { icon: FaDumbbell, label: "Programs", href: "#programs" },
   { icon: FaUsers, label: "Trainers", href: "#trainers" },
-  { icon: FaWhatsapp, label: "Chat", href: "https://wa.me/919999999999", external: true },
+  { icon: FaWhatsapp, label: "Chat", href: waHref, external: true },
 ] as const;
 
 function FloatingDock() {

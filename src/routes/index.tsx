@@ -1,12 +1,13 @@
 import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { heroBgUrl, titleLogoUrl } from "@/assets/images";
+import { heroBgUrl, logoUrl, titleLogoUrl } from "@/assets/images";
 import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import Loader from "@/components/novafit/Loader";
 import { SectionFlowTransition } from "@/components/novafit/SectionFlowTransition";
 import Navbar from "@/components/novafit/Navbar";
 import FloatingDock from "@/components/novafit/FloatingDock";
 import MobileStickyCta from "@/components/novafit/MobileStickyCta";
+import MobileQuickActions from "@/components/novafit/MobileQuickActions";
 import { MembershipProvider } from "@/components/novafit/membership-context";
 import { siteConfig } from "@/lib/env";
 import { getHealthClubJsonLd } from "@/lib/seo";
@@ -56,7 +57,10 @@ export const Route = createFileRoute("/")({
       { name: "twitter:description", content: siteConfig.description },
       { name: "twitter:image", content: titleLogoUrl },
     ],
-    links: [{ rel: "preload", as: "image", href: heroBgUrl, type: "image/webp" }],
+    links: [
+      { rel: "preload", as: "image", href: heroBgUrl, type: "image/webp", fetchPriority: "high" },
+      { rel: "preload", as: "image", href: logoUrl, type: "image/png", fetchPriority: "high" },
+    ],
     scripts: [
       {
         type: "application/ld+json",
@@ -75,7 +79,7 @@ function Index() {
       <div className="relative min-h-screen overflow-x-clip bg-background text-foreground">
         <Loader />
         <Navbar />
-        <main className="pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
+        <main className="pb-[calc(8.5rem+env(safe-area-inset-bottom,0px))] md:pb-0">
           <Hero />
           <SectionFlowTransition variant="hero-down" />
           <WhyChoose />
@@ -98,6 +102,7 @@ function Index() {
         </main>
         <Footer />
         <FloatingDock />
+        <MobileQuickActions />
         <MobileStickyCta />
       </div>
     </MembershipProvider>

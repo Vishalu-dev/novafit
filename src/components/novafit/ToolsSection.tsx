@@ -105,41 +105,45 @@ function CalorieTracker() {
   );
 }
 
+const LEVEL_PLANS = {
+  Beginner: {
+    protein: "1.2g/kg",
+    workout: "Full Body 3x Weekly",
+    diet: "Maintenance Calories",
+  },
+  Intermediate: {
+    protein: "1.6g/kg",
+    workout: "Push Pull Legs",
+    diet: "Lean Bulk",
+  },
+  Advanced: {
+    protein: "2.0g/kg",
+    workout: "Body Part Split",
+    diet: "Performance Nutrition",
+  },
+} as const;
+
+type FitnessLevel = keyof typeof LEVEL_PLANS;
+
 function AIRecco() {
   const [goal, setGoal] = useState("Muscle Gain");
-  const [level, setLevel] = useState("Beginner");
-  const plans = {
-    "Weight Loss": {
-      workout: "5x HIIT + 3x Full-Body Strength weekly",
-      diet: "High-protein cutting macros, calorie deficit",
-      protein: "1.8g per kg bodyweight",
-    },
-    "Muscle Gain": {
-      workout: "5x Hypertrophy split + 2x conditioning",
-      diet: "Lean bulk with 300-400 kcal surplus",
-      protein: "2.0g per kg bodyweight",
-    },
-    Endurance: {
-      workout: "4x Conditioning + 2x Strength + 1x Mobility",
-      diet: "Balanced macros, carb-forward pre-training",
-      protein: "1.6g per kg bodyweight",
-    },
-  } as const;
-  const p = plans[goal as keyof typeof plans];
+  const [level, setLevel] = useState<FitnessLevel>("Beginner");
+  const plan = LEVEL_PLANS[level];
   return (
     <div className="rounded-2xl glass-strong p-6 md:p-8">
       <h3 className="font-display text-xl font-bold uppercase">AI Fitness Match</h3>
       <p className="mt-1 text-xs text-muted-foreground">Smart plan based on your goal and level.</p>
       <div className="mt-5 grid grid-cols-2 gap-3">
         <Select label="Goal" value={goal} onChange={(e) => setGoal(e.target.value)} options={["Weight Loss", "Muscle Gain", "Endurance"]} />
-        <Select label="Level" value={level} onChange={(e) => setLevel(e.target.value)} options={["Beginner", "Intermediate", "Advanced"]} />
+        <Select label="Level" value={level} onChange={(e) => setLevel(e.target.value as FitnessLevel)} options={["Beginner", "Intermediate", "Advanced"]} />
       </div>
       <div className="mt-6 space-y-2">
         {[
-          { l: "Workout", v: p.workout },
-          { l: "Diet", v: p.diet },
-          { l: "Protein", v: p.protein },
+          { l: "Goal", v: goal },
           { l: "Level", v: level },
+          { l: "Protein", v: plan.protein },
+          { l: "Workout", v: plan.workout },
+          { l: "Diet", v: plan.diet },
         ].map((row) => (
           <div key={row.l} className="flex items-start justify-between gap-3 rounded-xl bg-background/40 p-3">
             <span className="font-display text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">{row.l}</span>
